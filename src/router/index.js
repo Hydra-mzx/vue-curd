@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Home from '@/components/home/home'
-import Login from '@/components/login/login'
-import Users from '@/components/users/users'
-import Rights from '@/components/rights/rights'
-import Roles from '@/components/roles/roles'
+// import Home from '@/components/home/home'
+//路由懒加载 指页面在加载路由时 的首频优化 ：只在使用当前路由时，才去加载js文件
+const Home = ()=> import('@/components/home/home')
+const Login = ()=> import('@/components/login/login')
+const Users = ()=> import('@/components/users/users')
+const Roles = ()=> import('@/components/roles/roles')
 
 Vue.use(Router)
 

@@ -60,7 +60,8 @@ export default {
         .post("login", this.form)
         .then(backdata => {
           //console.log(backdata);
-          if (backdata.data.meta.status == 200) {
+          let {data,meta} = backdata.data;
+          if (meta.status == 200) {
             //localStorage保存登录信息 token
             window.localStorage.setItem('token',backdata.data.data.token);
             // 弹框消息
@@ -72,6 +73,8 @@ export default {
             this.$router.push("/");
             // this.$router.push({name:'home'});
             // name对应 router
+          }else if(meta.status == 400){
+            this.$message.error(meta.msg);
           }
         });
     }

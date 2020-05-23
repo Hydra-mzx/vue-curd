@@ -3,7 +3,7 @@
     <el-header>
       <el-col :span="4">
         <div class="grid-content bg-purple">
-          <img src="/static/shop.png" alt="">
+          <img src="/static/shop.png" alt />
         </div>
       </el-col>
       <el-col :span="16">
@@ -21,41 +21,22 @@
     <el-container>
       <el-aside width="200px">
         <el-col :span="24">
-            <!--             @open="handleOpen"
-            @close="handleClose" -->
-          <el-menu
-            :router="true"
-            default-active="2"
-            class="el-menu-vertical-demo"
-          >
-            <el-submenu index="1">
+          <!--             @open="handleOpen"
+          @close="handleClose"-->
+          <el-menu :router="true" default-active="2" class="el-menu-vertical-demo">
+            <el-submenu v-for="item1 in menuList" :index="item1.path" :key="item1.id">
               <template slot="title">
                 <i class="el-icon-location"></i>
-                <span>用户管理</span>
+                <span>{{item1.authName}} </span>
               </template>
               <el-menu-item-group>
-                <el-menu-item index="users">
-                  <i class="el-icon-user"></i>
-                  用户列表
+                <el-menu-item v-for="item2 in item1.children" :index="item2.path" :key="item2.id">
+                  <i class="el-icon-menu"></i>
+                  {{item2.authName}}
                 </el-menu-item>
               </el-menu-item-group>
             </el-submenu>
-            <el-submenu index="2">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>权限管理</span>
-              </template>
-              <el-menu-item-group>
-                <el-menu-item index="roles">
-                  <i class="el-icon-thumb"></i>
-                  角色列表
-                </el-menu-item>
-                <el-menu-item index="rights">
-                  <i class="el-icon-set-up"></i>
-                  权限列表
-                </el-menu-item>
-              </el-menu-item-group>
-            </el-submenu>
+
           </el-menu>
         </el-col>
       </el-aside>
@@ -68,20 +49,34 @@
 
 <script>
 export default {
-    
   //登录？页面访问
   //利用钩子函数在页面渲染之前
   mounted() {
+    this.getMenuList();
     // var token = window.localStorage.getItem("token");
     // if (!token) {
     //   this.$message.error("请登录");
     //   this.$router.push({ name: "Login" });
     // }
   },
+  data () {
+    return {
+      menuList:[]
+    }
+  },
   methods: {
     logout() {
       window.localStorage.clear("token");
       this.$router.push({ name: "Login" });
+    },
+    getMenuList() {
+      this.$myHttp({
+        url: "menus",
+        method: "get"
+      }).then(backdata => {
+        let { data, meta } = backdata.data;
+        this.menuList = data;
+      });
     }
   }
 };
